@@ -8,16 +8,16 @@ class ParticipantM {
   String _timeSlab;
   int _guestStatus;
   String _createdDate;
-  int _gkey;//autoincrement generated key
+  int _gkey; //autoincrement generated key
 
-  static var _statusList = ['Registered','Confirmed','Not Attending'];
+  static var _statusList = ['Registered', 'Confirmed', 'Not Attending'];
 
   ParticipantM(this._partyId, this._hostGkey, this._guestGkey,
       this._memberCount, this._timeSlab, this._guestStatus);
 
-   String get partyId => _partyId;
+  String get partyId => _partyId;
 
-  set  partyId(String new_partyId) {
+  set partyId(String new_partyId) {
     this._partyId = new_partyId;
   }
 
@@ -79,7 +79,7 @@ class ParticipantM {
   }
 
   ParticipantM.fromMapObject(Map<String, dynamic> map) {
-    _partyId = map['partyId'];
+    _partyId = map['partyid'];
     _hostGkey = map['hostgkey'];
     _guestGkey = map['guestgkey'];
     _memberCount = map['membercount'];
@@ -89,7 +89,7 @@ class ParticipantM {
     _gkey = map['gkey'];
   }
 
-  static getStatusAsString (int value) {
+  static getStatusAsString(int value) {
     String status;
     switch (value) {
       case 1:
@@ -104,21 +104,43 @@ class ParticipantM {
     }
     return status;
   }
+
   //['Registered','Confirmed','Not Attending'];
-  static getStatusasint(String val){
+  static int getStatusasint(String val) {
     int status;
-    switch(val){
+    switch (val) {
       case 'Registered':
-      status=0;
-      break;
+        status = 0;
+        break;
       case 'Confirmed':
-        status=1;
+        status = 1;
         break;
       case 'Not Attending':
-        status=2;
+        status = 2;
         break;
+      default:
+        status = 0;
+        break;
+    }
+    return status;
   }
 
+  static String getstatusasString(int st) {
+    String status;
+    switch (st) {
+      case 0:
+        status = 'Registered';
+        break;
+      case 1:
+        status = 'Confirmed';
+        break;
+      case 2:
+        status = 'Not Attending';
+        break;
+      default:
+        status = 'Registered';
+        break;
+    }
+    return status;
   }
-
 }
