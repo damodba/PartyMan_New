@@ -16,29 +16,32 @@ class FunctionListView extends StatefulWidget {
   @override
 
   FunctionM functionM;
+  ParticipantM paticipationM;
   String title;
-
-  FunctionListView(this.functionM, this.title);
+  FunctionListView(this.functionM, this.title,this.paticipationM);
 
   State<StatefulWidget> createState() {
-    return FunctionListStateView(this.functionM, this.title);
+    return FunctionListStateView(this.functionM, this.title,this.paticipationM);
   }
 }
 
 class FunctionListStateView extends State<FunctionListView> {
 
   DatabaseHelper helper = DatabaseHelper();
+  ParticipantM partiM;
   List<FunctionM> functionList;
 
+  FunctionListStateView(this.functionM, this.title,this.partiM);
+
   int count = 0;
-  TextEditingController count_Controller = TextEditingController();
-  int no_of_people = 0;
+
   FunctionM functionM;
   String title;
   List<String> List_Status = ['Registered','Confirmed','Not Attending'];
-  String Status_of_user = 'Registered';
 
-  FunctionListStateView(this.functionM, this.title);
+
+  TextEditingController count_Controller = TextEditingController();
+
 
   void _launchURL(String Url) async {
     if (await canLaunch(Url)) {
@@ -56,7 +59,8 @@ class FunctionListStateView extends State<FunctionListView> {
         .of(context)
         .textTheme
         .headline6;
-
+    int no_of_people =partiM.memberCount;
+    String Status_of_user =ParticipantM.getstatusasString(partiM.guestStatus);
     return Scaffold(
       //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -140,6 +144,7 @@ class FunctionListStateView extends State<FunctionListView> {
                         onTap: () {
                           setState(() {
                             no_of_people += 1;
+                            partiM.memberCount=no_of_people;
                           });
                         }),
                     trailing:
@@ -149,6 +154,7 @@ class FunctionListStateView extends State<FunctionListView> {
                           setState(() {
                             if (no_of_people > 0) {
                               no_of_people = no_of_people - 1;
+                              partiM.memberCount=no_of_people;
                             }
                           });
                         }),
@@ -167,6 +173,7 @@ class FunctionListStateView extends State<FunctionListView> {
                         onChanged: (valueSelectedByUser) {
                           setState(() {
                             Status_of_user = valueSelectedByUser;
+                            partiM.guestStatus=ParticipantM.getStatusasint(valueSelectedByUser);
                           });
                         })),
                 Padding(
@@ -223,20 +230,26 @@ class FunctionListStateView extends State<FunctionListView> {
   void _save()async{
     int result;
     int result1;
+    int result3;
     //String partid=functionM.hostedBy+functionM.partyid.toString();
     //int status=ParticipantM.getStatusasint(Status_of_user);
    // var paticipationM=ParticipantM(partid,functionM.hostedBy,'sds',no_of_people,'0',status);
-    int status=ParticipantM.getStatusasint(Status_of_user);
+    //int status=ParticipantM.getStatusasint(Status_of_user);
     UserM userM = await getUserValue();
-    var participantM=ParticipantM(functionM.partyGkey,functionM.hostedBy,userM.userId,no_of_people,'0',status);
-    if(participantM.gkey==null){
+    if(partiM.gkey==null){
+      var participantM=ParticipantM(functionM.partyGkey,functionM.hostedBy,userM.userId,partiM.memberCount,'0',partiM.guestStatus);
      result1=await helper.insertParticipant(participantM);
      debugPrint("added a row in participant table");
      functionM.partyid=null;
      result = await helper.insertFunctioninLocal(functionM);
-     debugPrint("added funtion in the databasre");
+     debugPrint("added funtion in the function table");
     }
+    else{
 
+      result3=await helper.updateParticipant(partiM);
+      debugPrint("upadted your changes");
+    }
+    Navigator.of(context).pop();
     //adds only in the local database not in firebase db
     //result_2= await helper.i
     //debugPrint(result.toString());
