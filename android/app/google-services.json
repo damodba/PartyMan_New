@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "59627143403",
+    "firebase_url": "https://party-man.firebaseio.com",
+    "project_id": "party-man",
+    "storage_bucket": "party-man.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59627143403:android:acfdab1d5c54ed7d2abeae",
+        "android_client_info": {
+          "package_name": "insan.party_man"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59627143403-hl2slvei52uvbibimslpfmbiu3g009d0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "insan.party_man",
+            "certificate_hash": "b8a11fb4697d51b0bbb29d1ebdd577e9c19594b6"
+          }
+        },
+        {
+          "client_id": "59627143403-2tfnn7mt0km2n2512g32naq274vskvvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnuKvV2PZgkNkQnJ6Z7QOEvHb3Hnu9bOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "59627143403-2tfnn7mt0km2n2512g32naq274vskvvi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
