@@ -188,21 +188,20 @@ class FunctionListState extends State<FunctionList> {
 
   void navigateToDetail(FunctionM functionList, String title) async {
     String partykey=functionList.partyGkey;
-    ParticipantM parti=await databaseHelper.Query(partykey);
-    debugPrint("must print after");
+    ParticipantM parti = await databaseHelper.Query(partykey);
+    //debugPrint("must print after");
     if(parti!=null){
       debugPrint('the party exists and is queryed from participat table');
       debugPrint(parti.toString());
     }
-
     bool result =
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return FunctionListView(functionList, title);
+      return FunctionListView(functionList, title,parti);
     }));
 
     if (result = true) {
       updateFunctionList();
-    }
+    }//wht is this for??
   }
   void navigateToFunctionReg(functionList, String title) async {
     bool result =
