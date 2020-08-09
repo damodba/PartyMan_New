@@ -44,4 +44,22 @@ class FireBaseDB{
    return func;
 
   }
+
+  Future<void> addParticipant(String Collection_name,paticipantm) async{
+    Firestore.instance.collection(Collection_name).add(paticipantm).catchError((e){
+      print(e);
+    });
+  }
+
+  Future<void> UpdateParticipant(String Collection_name,participantM,String PARTYID,String HOSTGKEY) async {
+    QuerySnapshot func=await Firestore.instance.collection(Collection_name)
+                         .where('partyId', isEqualTo:PARTYID)
+                         .where('hostgkey', isEqualTo: HOSTGKEY).getDocuments();
+    Firestore.instance.collection(Collection_name).document(func.documents[0].documentID).updateData(participantM).catchError((e){
+    print(e);
+    });
+
+
+  }
+
 }
