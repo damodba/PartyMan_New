@@ -270,6 +270,7 @@ class DatabaseHelper {
   Future<int> insertParticipant(ParticipantM participantM) async {
     Database db = await this.database;
     var result = await db.insert(function_participants, participantM.toMap());
+    fbObj.addParticipant('ParticipantList',participantM.toMap());
     //fbObj.addUser('UserList',userM.toMap(),userM.userId);//.then can be used ,this is inserting in firestore db
     return result;
   }
@@ -277,16 +278,19 @@ class DatabaseHelper {
   Future<int> updateParticipant(ParticipantM participantM) async {
     var db = await this.database;
     var result = await db.update(function_participants, participantM.toMap(), where: '$colGuestGkey = ? and $colPartyId = ?', whereArgs: [participantM.guestGkey,participantM.partyId]);
+    debugPrint('updating in dbhelper');
+    fbObj.UpdateParticipant('ParticipantList', participantM.toMap(),participantM.partyId, participantM.hostGkey);
+    debugPrint('updating in firestore');
+    //debugPrint(participantM.memberCount.toString());
     //fbObj.UpdateUser('UserList',userM.toMap(),userM.userId);
     return result;
   }
   Future<ParticipantM> Query(String partyid) async {
     var db = await this.database;
     List<Map<String, dynamic>> res= await db.rawQuery('SELECT * from function_participants where $colPartyId=$partyid ');
-    ParticipantM participantM=ParticipantM.fromMapObject(res[0]);
-    debugPrint(res.toString());
-   // var result = await db.update(function_participants, participantM.toMap(), where: '$colGuestGkey = ? and $colPartyId = ?', whereArgs: [participantM.guestGkey,participantM.partyId]);
-    //fbObj.UpdateUser('UserList',userM.toMap(),userM.userId);
+    debugPrint('inside query  $res.toString()');
+    debugPrint('testing query bala');
+    ParticipantM participantM= ParticipantM.fromMapObject(res[0]);
     return participantM;
   }
 
