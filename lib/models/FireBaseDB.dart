@@ -62,4 +62,9 @@ class FireBaseDB{
 
   }
 
+  Stream<QuerySnapshot> getParticipants(String Collection_name,String PARTYID)  {
+    return Firestore.instance.collection(Collection_name).where('partyId',isEqualTo:PARTYID).snapshots();
+
+  }//we removed async because there is a clash in datatype return
+
 }
