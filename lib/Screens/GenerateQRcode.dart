@@ -50,7 +50,7 @@ class _GenerateQRcodeState extends State<GenerateQRcode> {
               color: Theme.of(context).primaryColor,
               child: Text("Save",style: TextStyle(color:Colors.white),),
               onPressed: ()async {
-                _captureAndSharePng();
+                //_captureAndSharePng();
                 //var _image = MemoryImage(img);//Decodes the given Uint8List buffer as an image, associating it with the given scale.
                   //Directory dir = await getApplicationDocumentsDirectory();
                   //File testFile = new File("${dir.path}/image.png");
