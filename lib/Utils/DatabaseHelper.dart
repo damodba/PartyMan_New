@@ -46,6 +46,10 @@ class DatabaseHelper {
   String colGuestStatus ='gueststatus';
   String colCreatedDateP = 'createddate';
   String colGkey = 'gkey';
+  String colGuestName = 'guestname';
+  String colGuestMobile = 'guestmobile';
+  String colGuestEmail ='guestemail';
+  String colGuestWhats ='guestwhatsapp';
 
   //UserM Module
   String  tuserM  = 'user_dtls';
@@ -90,13 +94,16 @@ class DatabaseHelper {
     // Open/create the database at a given path
     var partyDatabase;
 
-    partyDatabase= await openDatabase(path, version: 5, onCreate: _createDb, onUpgrade:_upgradeDb);
+    partyDatabase= await openDatabase(path, version: 7, onCreate: _createDb, onUpgrade:_upgradeDb);
 
     return partyDatabase;
   }
   void _upgradeDb(Database db, int oldVersion, int newVersion) async {
     debugPrint('inside upgradedb');
     List<dynamic> arguments;
+    debugPrint('in new version 6 old version $oldVersion');
+   //return;
+
     if (oldVersion < 2) {
       debugPrint('inside upgradedb less than 2');
       await db.execute(
@@ -135,6 +142,12 @@ class DatabaseHelper {
       await db.execute(
           'ALTER TABLE $function_detail ADD COLUMN [$colPartyGkey TEXT] ');
     }//we are in version 5
+
+    if (oldVersion < 7 ){
+      debugPrint('in new version 6 old version $oldVersion');
+      await db.execute(
+          'ALTER TABLE $function_participants ADD COLUMN [$colGuestName TEXT,$colGuestMobile TEXT,$colGuestEmail TEXT, $colGuestWhats TEXT] ');
+        }
   }
 
   void _createDb(Database db, int newVersion) async {
@@ -145,7 +158,8 @@ class DatabaseHelper {
 
     await db.execute(
         'CREATE TABLE $function_participants($colPartyId TEXT, $colHostGkey TEXT, $colGkey INTEGER PRIMARY KEY AUTOINCREMENT,'
-            '$colGuestGkey TEXT, $colMemberCount INTEGER, $colTimeSlab TEXT,$colGuestStatus INTEGER,$colCreatedDateP TEXT)');
+            '$colGuestGkey TEXT, $colMemberCount INTEGER, $colTimeSlab TEXT,$colGuestStatus INTEGER,$colCreatedDateP TEXT,'
+            '$colGuestName TEXT,$colGuestMobile TEXT,$colGuestEmail TEXT, $colGuestWhats TEXT)');
 
     await db.execute(
         'CREATE TABLE $tuserM($colUserId TEXT, $colName TEXT, $colAddress1 TEXT, $colAddress2 TEXT, $colCity TEXT,$colCountry TEXT,'
