@@ -18,70 +18,128 @@ class _TrackRegistrationState extends State<TrackRegistration> {
   _TrackRegistrationState(this.id);
 
   FireBaseDB fbObj = FireBaseDB();
-
+  int status=0;
   @override
   Widget build(BuildContext context) {
     // int number= 9090909030072032;
     ParticipantM partiregister;
     return Scaffold(
-      appBar: AppBar(title: Text('Your Party Registration Details')),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: StreamBuilder(
-          stream: Firestore.instance
-              .collection('ParticipantList')
-              .where('partyId', isEqualTo: id)
-              .snapshots(),
-          builder: (context, snapshot) {
-              if(!snapshot.hasData){ return Center(
-                child: SpinKitRotatingCircle(
-                  color: Colors.lightBlue,
-                  size: 50.0,
-                ),
-              );}
-              int len=snapshot.data.documents.length;
-              int confirmed = 0, notattending = 0, registered = 0;
-              for(int position=0;position<len;position++) {
-                if (snapshot.data.documents[position]['gueststatus'] == 0)
-                  {registered =registered+
-                  snapshot.data.documents[position]['membercount'];
+        appBar: AppBar(title: Text('Your Party Registration Details')),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: StreamBuilder(
+            stream: Firestore.instance
+                .collection('ParticipantList')
+                .where('partyId', isEqualTo: id)
+                .snapshots(),
+            builder: (context, snapshot) {
+                if(!snapshot.hasData){ return Center(
+                  child: SpinKitRotatingCircle(
+                    color: Colors.lightBlue,
+                    size: 50.0,
+                  ),
+                );}
+                int len=snapshot.data.documents.length;
+                int confirmed = 0, notattending = 0, registered = 0;
+                for(int position=0;position<len;position++) {
+                  if (snapshot.data.documents[position]['gueststatus'] == 0)
+                    {registered =registered+
+                    snapshot.data.documents[position]['membercount'];
+                  }
+                  if (snapshot.data.documents[position]['gueststatus'] == 1) {
+                    confirmed = confirmed +
+                        snapshot.data.documents[position]['membercount'];
+                  }
+                   if (snapshot.data.documents[position]['gueststatus'] == 2)
+                    notattending =notattending+
+                    snapshot.data.documents[position]['membercount'];
                 }
-                if (snapshot.data.documents[position]['gueststatus'] == 1) {
-                  confirmed = confirmed +
-                      snapshot.data.documents[position]['membercount'];
-                }
-                 if (snapshot.data.documents[position]['gueststatus'] == 2)
-                  notattending =notattending+
-                  snapshot.data.documents[position]['membercount'];
-              }
-              //debugPrint(snapshot.data.documents.length.toString()); //working
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  CircleAvatar(child: Text('$registered \n rcount'),
-                    backgroundColor: Theme
-                        .of(context)
-                        .primaryColorLight,
-                    radius: 50.0,),
 
-                  CircleAvatar(child: Text('$confirmed \n ccount'),
-                    backgroundColor: Theme
-                        .of(context)
-                        .primaryColorLight,
-                    radius: 50.0,),
+                //debugPrint(snapshot.data.documents.length.toString()); //working
+                return Column(
+                    //textDirection: TextDirection.ltr,
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: (){
+                            debugPrint('tapped');
+                            setState(() {
+                              status=0;
+                            });
+                          },
+                          child: CircleAvatar(child: Text('$registered \n rcount'),
+                            backgroundColor: Theme
+                                .of(context)
+                                .primaryColorLight,
+                            radius: 50.0,),
+                        ),
 
+                        GestureDetector(
+                          onTap: (){
+                            debugPrint('tapped');
+                            setState(() {
+                              status=1;
+                            });
+                          },
+                          child: CircleAvatar(child: Text('$confirmed \n ccount'),
+                            backgroundColor: Theme
+                                .of(context)
+                                .primaryColorLight,
+                            radius: 50.0,),
+                        ),
 
-                  CircleAvatar(child: Text('$notattending \n nacount'),
-                    backgroundColor: Theme
-                        .of(context)
-                        .primaryColorLight,
-                    radius: 50.0,),
-                  //Text(snapshot.data.documents[postion]['gueststatus'].toString()),
-                ],
-              );
-          },
+                        GestureDetector(
+                          onTap: (){
+                            debugPrint('tapped');
+                            setState(() {
+                              status=2;
+                            });
+                          },
+                          child: CircleAvatar(child: Text('$notattending \n nacount'),
+                            backgroundColor: Theme
+                                .of(context)
+                                .primaryColorLight,
+                            radius: 50.0,),
+                        ),
+                      ],
+                    ),
+                    sizedBox(),
+                    printNames(snapshot, context, status)
+                    //Text(snapshot.data.documents[postion]['gueststatus'].toString()),
+                  ],
+                );
+            },
+          ),
         ),
+      );
+  }
+  Widget sizedBox(){
+    return SizedBox(height: 5.0);
+  }
+  Widget printNames(snapshot,BuildContext context,int status){
+    return Expanded(
+      child: ListView.builder(
+        itemCount: snapshot.data.documents.length,
+        itemBuilder:(context,int position){
+           //debugPrint(snapshot.data.documents[position]['gueststatus'].toString());
+           //debugPrint(snapshot.data.documents[position]['membercount'].toString());
+           //debugPrint(snapshot.data.documents.length.toString());
+          if(snapshot.data.documents[position]['gueststatus']==status) {
+            return Card(
+              elevation: 5,
+              child: Text(
+                  snapshot.data.documents[position]['membercount'].toString()),
+            );
+          }
+          else{
+          }
+        },
       ),
     );
   }
 }
+
