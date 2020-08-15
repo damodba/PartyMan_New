@@ -8,12 +8,17 @@ class ParticipantM {
   String _timeSlab;
   int _guestStatus;
   String _createdDate;
+  //$colGuestName TEXT,$colGuestMobile TEXT,$colGuestEmail TEXT, $colGuestWhats TEXT
+  String _guestName;
+  String _guestMobile;
+  String _guestEmail;
+  String _guestWhats;
   int _gkey; //autoincrement generated key
 
   static var _statusList = ['Registered', 'Confirmed', 'Not Attending'];
 
   ParticipantM(this._partyId, this._hostGkey, this._guestGkey,
-      this._memberCount, this._timeSlab, this._guestStatus);
+      this._memberCount, this._timeSlab, this._guestStatus,this._guestName,this._guestMobile,this._guestEmail,this._guestWhats);
 
   String get partyId => _partyId;
 
@@ -63,6 +68,25 @@ class ParticipantM {
     this._gkey = newGkey;
   }
 
+  String get guestName => _guestName;
+
+  set guestName(String name) {
+    this._guestName = name;
+  }
+
+  String get guestMobile => _guestMobile;
+  set guestMobile(String num) {
+    this._guestMobile = num;
+  }
+  String get guestEmail => _guestEmail;
+  set guestEmail(String num) {
+    this._guestEmail = num;
+  }
+  String get guestWhats => _guestWhats;
+  set guestWhats(String num) {
+    this._guestWhats = num;
+  }
+
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     if (_gkey != null) {
@@ -75,6 +99,10 @@ class ParticipantM {
     map['timeslab'] = _timeSlab;
     map['gueststatus'] = _guestStatus;
     map['createddate'] = _createdDate;
+    map['guestname']=_guestName;
+    map['guestmobile']=_guestMobile;
+    map['guestemail']=_guestEmail;
+    map['guestwhats']=_guestWhats;
     return map;
   }
 
@@ -87,6 +115,10 @@ class ParticipantM {
     _guestStatus = map['gueststatus'];
     _createdDate = map['createddate'];
     _gkey = map['gkey'];
+    _guestName=map['guestname'];
+    _guestMobile=map['guestmobile'];
+    _guestEmail=map['guestemail'];
+    _guestWhats=map['guestwhats'];
   }
 
   static getStatusAsString(int value) {
