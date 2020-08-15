@@ -237,7 +237,7 @@ class FunctionListStateView extends State<FunctionListView> {
     //int status=ParticipantM.getStatusasint(Status_of_user);
     UserM userM = await getUserValue();
     if(partiM.gkey==null){
-      var participantM=ParticipantM(functionM.partyGkey,functionM.hostedBy,userM.userId,partiM.memberCount,'0',partiM.guestStatus);
+      var participantM=ParticipantM(functionM.partyGkey,functionM.hostedBy,userM.userId,partiM.memberCount,'0',partiM.guestStatus,userM.name,userM.mPhone,userM.emailId,userM.mPhone);
      result1=await helper.insertParticipant(participantM);
      debugPrint("added a row in participant table");
      functionM.partyid=null;
