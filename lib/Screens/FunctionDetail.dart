@@ -53,10 +53,11 @@ class FunctionDetailState extends State<FunctionDetail> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle_H6 = Theme.of(context).textTheme.headline6;
+    TextStyle textStyle_H6 = Theme.of(context).textTheme.bodyText1;
     TextStyle textStyle_title = Theme.of(context).textTheme.title;
+    EdgeInsets TextEdgeInsets = EdgeInsets.only(top: 5.0, bottom: 5.0);
 
-    titleController.text = functionM.title;
+     titleController.text = functionM.title;
     descriptionController.text = functionM.partyDesc;
     partydateController.text = functionM.partyDate;
     venueController.text = functionM.venue;
@@ -104,7 +105,7 @@ class FunctionDetailState extends State<FunctionDetail> {
                         })),
                 //Second Element Title
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: TextEdgeInsets,
                   child: TextField(
                     controller: titleController,
                     style: textStyle_H6,
@@ -123,10 +124,11 @@ class FunctionDetailState extends State<FunctionDetail> {
                 //Text(functionM.partyGkey),
                 //Third Element partydesc
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: TextEdgeInsets,
                   child: TextField(
                     controller: descriptionController,
                     style: textStyle_H6,
+                    maxLines: null,
                     onChanged: (value) {
                       debugPrint("Something Changed in desc  field");
                       updateDescription();
@@ -142,7 +144,7 @@ class FunctionDetailState extends State<FunctionDetail> {
 
                 //Fourth Element
                 Padding(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    padding:TextEdgeInsets,
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -179,7 +181,7 @@ class FunctionDetailState extends State<FunctionDetail> {
                     )),
                 //fifth element
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: TextEdgeInsets,
                   child: TextField(
                     controller: venueController,
                     style: textStyle_H6,
@@ -200,7 +202,7 @@ class FunctionDetailState extends State<FunctionDetail> {
                   children: <Widget>[
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                        padding: TextEdgeInsets,
                         child: TextField(
                           controller: gmapDtlsController,
                           style: textStyle_H6,
@@ -228,7 +230,7 @@ class FunctionDetailState extends State<FunctionDetail> {
                 ),
                 //sixth element
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: TextEdgeInsets,
                   child: TextField(
                     controller: imageContoller,
                     style: textStyle_H6,
@@ -245,7 +247,7 @@ class FunctionDetailState extends State<FunctionDetail> {
                   ),
                 ),
                 ListTile(
-                  title: Text('Track Registration', style: textStyle_title),
+                  title: Text('Track Registration', style: textStyle_H6),
                   leading: Checkbox(
                     value: checkBoxValue,
                     onChanged: (bool value) {
@@ -280,10 +282,12 @@ class FunctionDetailState extends State<FunctionDetail> {
                     : Text(''),
                 //8th element save delete button
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: TextEdgeInsets,
                   child: Row(
                     children: <Widget>[
-                      Expanded(
+                  SizedBox(
+                    width: 80.0,
+                    height: 40.0,
                         child: RaisedButton(
                           color: Theme.of(context).primaryColorDark,
                           textColor: Theme.of(context).primaryColorLight,
@@ -299,12 +303,15 @@ class FunctionDetailState extends State<FunctionDetail> {
                         ),
                       ),
                       Container(
-                        width: 5.0,
+                        width: 3.0,
                       ),
-                      Expanded(
+                      SizedBox(
+                        width: 100.0,
+                        height: 40.0,
                         child: RaisedButton(
                           color: Theme.of(context).primaryColorDark,
                           textColor: Theme.of(context).primaryColorLight,
+
                           child: Text(
                             "Delete",
                             textScaleFactor: 1.5,
