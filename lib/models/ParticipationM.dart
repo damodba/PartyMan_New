@@ -13,12 +13,16 @@ class ParticipantM {
   String _guestMobile;
   String _guestEmail;
   String _guestWhats;
+  bool _checkboxVal;
   int _gkey; //autoincrement generated key
 
   static var _statusList = ['Registered', 'Confirmed', 'Not Attending'];
 
   ParticipantM(this._partyId, this._hostGkey, this._guestGkey,
       this._memberCount, this._timeSlab, this._guestStatus,this._guestName,this._guestMobile,this._guestEmail,this._guestWhats);
+
+  ParticipantM.withcheckbox(this._partyId, this._hostGkey, this._guestGkey,
+      this._memberCount, this._timeSlab, this._guestStatus,this._guestName,this._guestMobile,this._guestEmail,this._guestWhats,this._checkboxVal);
 
   String get partyId => _partyId;
 
@@ -86,7 +90,10 @@ class ParticipantM {
   set guestWhats(String num) {
     this._guestWhats = num;
   }
-
+  bool get checkboxVal => _checkboxVal;
+  set checkboxVal(bool res) {
+    this._checkboxVal = res;
+  }
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     if (_gkey != null) {
@@ -103,6 +110,7 @@ class ParticipantM {
     map['guestmobile']=_guestMobile;
     map['guestemail']=_guestEmail;
     map['guestwhats']=_guestWhats;
+    //map['checkboxval']=_checkboxVal;
     return map;
   }
 
@@ -119,6 +127,7 @@ class ParticipantM {
     _guestMobile=map['guestmobile'];
     _guestEmail=map['guestemail'];
     _guestWhats=map['guestwhats'];
+   // _checkboxVal=map['checkboxval'];
   }
 
   static getStatusAsString(int value) {
