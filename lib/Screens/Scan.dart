@@ -59,7 +59,7 @@ class _ScanState extends State<Scan> {
     FunctionM functioM=await scan.PartyIdtoFunction(scan.partyiD);
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder:(BuildContext context)=>FunctionListView(functioM,'Party Details',ParticipantM('','','',0,'',0))
+        builder:(BuildContext context)=>FunctionListView(functioM,'Party Details',ParticipantM('','','',0,'',0,'','','',''))
       )
     );
     //debugPrint(functioM.hostedBy);

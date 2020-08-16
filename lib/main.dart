@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context){
     return MaterialApp(
       title: 'Party Man',
-      theme: ThemeData(primarySwatch: Colors.deepOrange),
+      theme: ThemeData(primarySwatch: Colors.brown),
 
       //this property we can use it in any part of program
       debugShowCheckedModeBanner: false,

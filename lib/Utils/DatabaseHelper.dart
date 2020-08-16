@@ -49,7 +49,7 @@ class DatabaseHelper {
   String colGuestName = 'guestname';
   String colGuestMobile = 'guestmobile';
   String colGuestEmail ='guestemail';
-  String colGuestWhats ='guestwhatsapp';
+  String colGuestWhats ='guestwhats';
 
   //UserM Module
   String  tuserM  = 'user_dtls';
@@ -86,6 +86,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     var partyDatbase;
+
     // Get the directory path for both Android and iOS to store database.
     Directory directory = await getApplicationDocumentsDirectory();
     // print(directory.path);
@@ -99,6 +100,7 @@ class DatabaseHelper {
     return partyDatabase;
   }
   void _upgradeDb(Database db, int oldVersion, int newVersion) async {
+
     debugPrint('inside upgradedb');
     List<dynamic> arguments;
     debugPrint('in new version 6 old version $oldVersion');
@@ -151,6 +153,7 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
+    debugPrint('old version is $newVersion');//old vrn 7
     debugPrint('inside createdb');
     await db.execute('CREATE TABLE $function_detail($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT, '
         '$colDescription TEXT, $colStatus INTEGER, $colHostedby TEXT,$colVenue TEXT,$colCreatedDate TEXT,$colPartyDate TEXT,'
