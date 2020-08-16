@@ -5,7 +5,7 @@ import 'package:party_man/models/FireBaseDB.dart';
 import 'package:party_man/models/ParticipationM.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class TrackRegistration extends StatefulWidget {
   String id;
   TrackRegistration(this.id);
@@ -19,14 +19,13 @@ class _TrackRegistrationState extends State<TrackRegistration> {
   List<ParticipantM> partiR=[];
   List<ParticipantM> partiC=[];
   List<ParticipantM> partiNA=[];
-  
-  bool checkboxvalue=false;
+  List<ParticipantM> choosed=[];
+
   _TrackRegistrationState(this.id);
  Widget res;
   FireBaseDB fbObj = FireBaseDB();
   int status=0;
-
-
+  TextEditingController smscontroller=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,30 +57,39 @@ class _TrackRegistrationState extends State<TrackRegistration> {
                     {registered =registered+
                     snapshot.data.documents[position]['membercount'];
 
-                    partiR.add(ParticipantM(snapshot.data.documents[position]['partyid'],snapshot.data.documents[position]['hostgkey'],snapshot.data.documents[position]['guestgkey'],
+                    partiR.add(ParticipantM.withcheckbox(snapshot.data.documents[position]['partyid'],snapshot.data.documents[position]['hostgkey'],snapshot.data.documents[position]['guestgkey'],
                                           snapshot.data.documents[position]['membercount'],snapshot.data.documents[position]['timeslab'],snapshot.data.documents[position]['gueststatus'],
                                           snapshot.data.documents[position]['guestname'],snapshot.data.documents[position]['guestmobile'],snapshot.data.documents[position]['guestemail'],
-                                          snapshot.data.documents[position]['guestwhats']));
-                  }
+                                          snapshot.data.documents[position]['guestwhats'],false));
+
+
+                    }
                   if (snapshot.data.documents[position]['gueststatus'] == 1) {
                     confirmed = confirmed +
                         snapshot.data.documents[position]['membercount'];
 
-                    partiC.add(ParticipantM(snapshot.data.documents[position]['partyid'],snapshot.data.documents[position]['hostgkey'],snapshot.data.documents[position]['guestgkey'],
+                    partiC.add(ParticipantM.withcheckbox(snapshot.data.documents[position]['partyid'],snapshot.data.documents[position]['hostgkey'],snapshot.data.documents[position]['guestgkey'],
                         snapshot.data.documents[position]['membercount'],snapshot.data.documents[position]['timeslab'],snapshot.data.documents[position]['gueststatus'],
                         snapshot.data.documents[position]['guestname'],snapshot.data.documents[position]['guestmobile'],snapshot.data.documents[position]['guestemail'],
-                        snapshot.data.documents[position]['guestwhats']));
+                        snapshot.data.documents[position]['guestwhats'],false));
 
                   }
-                   if (snapshot.data.documents[position]['gueststatus'] == 2)
-                    notattending =notattending+
-                    snapshot.data.documents[position]['membercount'];
+                   if (snapshot.data.documents[position]['gueststatus'] == 2) {
+                     notattending = notattending +
+                         snapshot.data.documents[position]['membercount'];
 
-                  partiNA.add(ParticipantM(snapshot.data.documents[position]['partyid'],snapshot.data.documents[position]['hostgkey'],snapshot.data.documents[position]['guestgkey'],
-                      snapshot.data.documents[position]['membercount'],snapshot.data.documents[position]['timeslab'],snapshot.data.documents[position]['gueststatus'],
-                      snapshot.data.documents[position]['guestname'],snapshot.data.documents[position]['guestmobile'],snapshot.data.documents[position]['guestemail'],
-                      snapshot.data.documents[position]['guestwhats']));
-
+                     partiNA.add(ParticipantM.withcheckbox(
+                         snapshot.data.documents[position]['partyid'],
+                         snapshot.data.documents[position]['hostgkey'],
+                         snapshot.data.documents[position]['guestgkey'],
+                         snapshot.data.documents[position]['membercount'],
+                         snapshot.data.documents[position]['timeslab'],
+                         snapshot.data.documents[position]['gueststatus'],
+                         snapshot.data.documents[position]['guestname'],
+                         snapshot.data.documents[position]['guestmobile'],
+                         snapshot.data.documents[position]['guestemail'],
+                         snapshot.data.documents[position]['guestwhats'],false));
+                   }
                 }
 
                 //debugPrint(snapshot.data.documents.length.toString()); //working
@@ -96,6 +104,9 @@ class _TrackRegistrationState extends State<TrackRegistration> {
                         GestureDetector(
                           onTap: (){
                             debugPrint('tapped');
+                           setState(() {
+                           choosed=partiR;
+                           });
                             //debugPrint(partiR[0].memberCount.toString());
                            // status=0;
                             //printNames(snapshot, context, 0);
@@ -111,6 +122,9 @@ class _TrackRegistrationState extends State<TrackRegistration> {
                           onTap: (){
                             debugPrint('tapped');
                             //status=1;
+                            setState(() {
+                              choosed=partiC;
+                            });
                             //printNames(snapshot, context, 1);
                           },
                           child: CircleAvatar(child: Text('$confirmed \n ccount'),
@@ -124,6 +138,9 @@ class _TrackRegistrationState extends State<TrackRegistration> {
                           onTap: (){
                             debugPrint('tapped');
                             //status=2;
+                            setState(() {
+                              choosed=partiNA;
+                            });
                               //printNames(snapshot, context, 2);
                           },
                           child: CircleAvatar(child: Text('$notattending \n nacount'),
@@ -135,7 +152,42 @@ class _TrackRegistrationState extends State<TrackRegistration> {
                       ],
                     ),
                     sizedBox(),
-                   PrintList(partiR),
+                   PrintList(choosed),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                      child: TextField(
+                        controller: smscontroller,
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.message),
+                            labelText: 'SMS text/Email msg',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            )),
+                      ),
+                    ),
+                   Row(
+                     children: <Widget>[
+                       FlatButton(
+                           color: Theme.of(context).primaryColorLight,
+                           onPressed: (){
+                             sendsms(smscontroller.text);
+                           },
+                           child:Text("send SMS")
+                       ),
+                       Container(
+                         width: 10.0,
+                       ),
+                       FlatButton(
+                           color: Theme.of(context).primaryColorLight,
+                           onPressed: (){
+                             sendemail(smscontroller.text);
+                           },
+                           child:Text("send Email")
+                       )
+                     ],
+                   )
+
+
                    //printNames(snapshot, context, status),
                     //Text(snapshot.data.documents[postion]['gueststatus'].toString()),
                   ],
@@ -145,6 +197,15 @@ class _TrackRegistrationState extends State<TrackRegistration> {
         ),
       );
   }
+
+  void sendsms(String smscontroller){
+      String sms1='sms:6369288457,9840349055?body=$smscontroller';
+      launch(sms1);
+  }
+  void sendemail(String emailcontroller){
+    var email="mailto:dharshinibalamurugan31@gmail.com,lalithbalamurugan@gmail.com?body=$emailcontroller";//subject can be there
+    launch(email);
+  }
   Widget sizedBox(){
     return SizedBox(height: 5.0);
   }
@@ -152,10 +213,12 @@ class _TrackRegistrationState extends State<TrackRegistration> {
   Widget PrintList(List<ParticipantM> partiR){
     int i;
     int len=partiR.length;
+
     return Expanded(
       child: ListView.builder(
         itemCount: len,
         itemBuilder: (context,int pos){
+          bool checkboxvalue=partiR[pos].checkboxVal;
           return Card(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -178,7 +241,7 @@ class _TrackRegistrationState extends State<TrackRegistration> {
                   value: checkboxvalue,
                   onChanged: (bool value) {
                     setState(() {
-                      checkboxvalue = value;
+                      partiR[pos].checkboxVal=value;
                     });
                   },
                 ),
@@ -191,55 +254,11 @@ class _TrackRegistrationState extends State<TrackRegistration> {
 
   }
   //partiR[pos].memberCount.toString()
-  Widget printNames(snapshot,BuildContext context,int status){
-    debugPrint('inside printnames' + status.toString());
-    return Expanded(
-      child: ListView.builder(
-        itemCount: snapshot.data.documents.length,
-        itemBuilder:(context,int position){
-           debugPrint(snapshot.data.documents[position]['gueststatus'].toString());
-           debugPrint(snapshot.data.documents[position]['membercount'].toString());
-           debugPrint(snapshot.data.documents.length.toString());
-          if(snapshot.data.documents[position]['gueststatus']==status) {////snapshot.data.documents[position]['membercount'].toString()),
-            return Card(
-              //color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0)
-              ),
-              //elevation: 5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                    flex:2,
-                    child: Text(
-                                 "Indira Priyadharshini",style: TextStyle(fontSize: 20.0),
-                 ),
-                  ),
-                  Expanded(
-                    flex:2,
-                    child: Text(
-                      "dharshinibalamurugan31@gmail.com \n 9898989898",style: TextStyle(fontSize: 15.0,fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  Expanded(
-                    flex:1,
-                    child: Checkbox(
-                      value: checkboxvalue,
-                      onChanged: (bool value) {
-                        setState(() {
-                          checkboxvalue = value;
-                        });
-                      },
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
+
 }
 
+//if (Platform.isAndroid) {
+//
+//} else if (Platform.isIOS) {
+//
+//}
