@@ -62,21 +62,36 @@ class FunctionListStateView extends State<FunctionListView> {
     int no_of_people =partiM.memberCount;
     String Status_of_user =ParticipantM.getstatusasString(partiM.guestStatus);
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      //backgroundColor: Colors.red,
       //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text('Party Details Full '),
+        title: Text('Party Details '),
+        backgroundColor: Colors.transparent,
       ),
       body: Scrollbar(
         child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/screen2.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
           padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
-          color: Colors.white,
+         // color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
 
-                FormRow('Party Title:', functionM.title),
-                FormRow('Party Desc:', functionM.partyDesc),
+
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(50.00),
+
+                ),
+
+                FormRow('Title:', functionM.title),
+                FormRow('Desc:', functionM.partyDesc),
                 FormRow('Venue:', functionM.venue),
                 //FormRow('Gmap:', functionM.gmapDtls),
 
@@ -90,12 +105,14 @@ class FunctionListStateView extends State<FunctionListView> {
                       Expanded(
                           flex: 1,
                           child:
-                          Text('Gmap Link:', style: textStyle_H6,)),
+                          Text('Gmap:', style: textStyle_H6,)),
                       Expanded(
                         flex: 3,
-                        child: RaisedButton.icon(
+                        child: FlatButton.icon(
+                          color: Colors.transparent,
                             icon:Icon(Icons.location_on),
                             label:Text("Google Map Link"),
+
                             onPressed: () {
                               _launchURL(functionM.gmapDtls);
                             }
@@ -115,10 +132,11 @@ class FunctionListStateView extends State<FunctionListView> {
                       Expanded(
                           flex: 1,
                           child:
-                          Text('Card Url:', style: textStyle_H6,)),
+                          Text('Card:', style: textStyle_H6,)),
                       Expanded(
                         flex: 3,
-                        child: RaisedButton.icon(
+                        child: FlatButton.icon(
+                          color: Colors.transparent,
                             icon:Icon(Icons.image),
                             label:Text("Image Url"),
                             onPressed: () {
@@ -133,9 +151,9 @@ class FunctionListStateView extends State<FunctionListView> {
 
 
                 FormRow('Status: ', FunctionM.getStatusAsString(functionM.status)),
-                FormRow('Party Date:', functionM.partyDate),
+                FormRow('Date:', functionM.partyDate),
 
-                Text("No of People attending:", style: textStyle_H6),
+                Text("Guest Count:", style: textStyle_H6),
                 ListTile(
                     dense: true,
 
@@ -220,6 +238,9 @@ class FunctionListStateView extends State<FunctionListView> {
           ),
         ),
       ),
+
+
+
     );
   }
 
